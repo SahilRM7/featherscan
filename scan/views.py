@@ -52,7 +52,7 @@ def audio_scan(request):
 
         try:
             # Load label dictionary
-            with open(os.path.join(settings.BASE_DIR, 'prediction.json'), 'r') as f:
+            with open(os.path.join(settings.BASE_DIR,'scan', 'prediction.json'), 'r') as f:
                 prediction_dict = json.load(f)
 
             # Load audio and extract MFCC
@@ -64,7 +64,7 @@ def audio_scan(request):
 
             # Convert to tensor and predict
             mfccs_tensors = tf.convert_to_tensor(mfccs_features, dtype=tf.float32)
-            model = tf.keras.models.load_model(os.path.join(settings.BASE_DIR, 'model.h5'))
+            model = tf.keras.models.load_model(os.path.join(settings.BASE_DIR,'scan', 'model.h5'))
             prediction = model.predict(mfccs_tensors)
 
             target_label = np.argmax(prediction)
@@ -80,4 +80,4 @@ def audio_scan(request):
         if os.path.exists(file_path):
             os.remove(file_path)
 
-    return render(request, 'audioscan.html', {'result': result})
+    return render(request, 'audscan.html', {'result': result})
